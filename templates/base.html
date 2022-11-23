@@ -1,18 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title or "TODOs" }}</title>
-    <link rel="stylesheet" href="/static/css/style.css" />
-    {% block head %}
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ title }}</title>
+        <link href="htpps://fonts.googleapis.com/css/?family=inter%display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{{ url_for(static, filename='css/main.css') }}" />
+        {% block head_content %}
 
-    {% endblock %}
+        {% endblock %}
 
-</head>
-<body>
-    {% block content %}
-    {% endblock %}
-</body>
+    </head>
+    <body>
+        <header class="header">
+
+        </header>
+        <main class="main">
+            {% block main_content %}
+            {% endblock %}
+
+        </main>
+    
+    </body>
 </html>

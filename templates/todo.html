@@ -1,14 +1,7 @@
 {% extends 'base.html' %}
 
+{% block main_content %}
+    <form class="form" method="POST">
 
-
-
-{% block content %}
-    <h1 class="todo-title">{{ text }}</h1>
-
-    {% if completed %}
-        <p class="todo todo--completed">You've completed this todo!</p>
-    {% else %}
-        <p class="todo todo--pending">You haven't completed this yet, why not to do it now? </p>
-    {% endif %}
+    </form>
 {% endblock %}
