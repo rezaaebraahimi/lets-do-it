@@ -29,14 +29,14 @@ def index():
         selected_date = datetime.datetime.today()
         
     habits_on_date = db.Todo.find({"added": {"$lte":selected_date}})    
-    completions = [
+    Completed = [
         habit["habit"]
         for habit in db.Completed.find({"date":selected_date})
     ]    
     return render_template("home.html",
                            habits=habits_on_date,
                            title="Let's Do IT - Home",
-                           completions=completions,
+                           completions=Completed,
                            selected_date=selected_date)
 
 
