@@ -1,10 +1,27 @@
 {% extends 'base.html' %}
 
-
-
 {% block main_content %}
-    <section>
+    <section class="dates">
+        {% for date in date_range(selected_date) %}
+            <a
+                class="dates__link"
+                href="{{ url_for('index', date=date) }}">
+            <time class="date" datetime="{{ date }}">
+                <span>{{ date.strftime("%a") }}</span>
+                <span>{{ date.strftime("%d") }}</span>
+            </time>
+            </a>
+        {% endfor %}
+    </section>
+    <section class="habit-list">
+        {% for habit in habits %}
+            <div class="habit">
+                <p class="habit__name">
+                    {{ habit }}
+                </p>
+            </div>
 
+        {% endfor %}
     </section>
 {% endblock %}
 
