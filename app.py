@@ -42,7 +42,7 @@ def add_habit():
                            selected_date=datetime.date.today())
 
 
-@app.route("/complete", method=["POST", "GET"])
+@app.route("/complete", methods=["POST"])
 def complete():
     date_string = request.form.get("date")
     habit = request.form.get("habitName")

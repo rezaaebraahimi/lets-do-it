@@ -101,3 +101,48 @@ body {
     align-items: center;
 }
 
+.habit {
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 26px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: aliceblue;
+    border: 2px solid black;
+    border-radius: 20px;
+}
+
+.habit:not(.completed) {
+    padding: 0;
+}
+
+.habit:not(.completed):hover {
+    background-color: rgb(0, 155, 155);
+}
+
+.habit__icon {
+    width: 1em;
+    height: 1em;
+}
+
+.habit__name {
+    margin: 0;
+}
+
+.habit__form {
+    width: 100%;
+}
+
+.habit__button {
+    display: block;
+    width: 100%;
+    padding: 20px;
+    font-size: inherit;
+    font-family: inherit;
+    border: none;
+    text-align: left;
+    background-color: unset;
+    cursor: pointer;
+}
