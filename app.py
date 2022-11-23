@@ -5,10 +5,8 @@ import datetime
 import uuid
 from flask import Flask, render_template, request, redirect, url_for
 
-
-app = Flask(__name__)
 load_dotenv()
-
+app = Flask(__name__)
 client = MongoClient(os.environ.get("MONGODB_URI"))
 db = client.Todo
 
