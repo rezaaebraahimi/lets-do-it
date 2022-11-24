@@ -62,6 +62,22 @@ def add_habit():
                            selected_date=today)
 
 
+@app.route("/show", methods = ["POST", "GET"])
+def show():
+    date_str = request.args.get("date")
+    if date_str:
+        selected_date = datetime.datetime.fromisoformat(date_str)
+    else:
+        selected_date = today_at_midnight()
+        
+    habits_does = db.Todo.find({"added": {"$lte":selected_date}}) 
+    allcompleted = [habit["habit"] for habit in db.Completed.find({"date":{"$lte":selected_date}})]
+    return render_template("show.html",
+                           title="Let's Do IT - Show All",
+                           completions=allcompleted,
+                           habits=habits_does,
+                           selected_date=selected_date)
+
 
 if __name__ == "__main__":
     app.run(host:="0.0.0.0", port:=int(os.environ.get('PORT', 5000)))
