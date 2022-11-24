@@ -25,7 +25,7 @@
                         class="dates__link {{ 'dates__link--current' if loop.index0 == 3 else '' }}"
                         href="{{ url_for('index', date=date) }}"
                         >
-                        <time class="date" datetime="{{ date }}">
+                        <time class="date" datetime="{{ selected_date }}">
                             <span>{{ date.strftime("%a") }}</span>
                             <span>{{ date.strftime("%d") }}</span>
                         </time>
