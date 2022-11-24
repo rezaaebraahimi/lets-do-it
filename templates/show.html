@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 
+
 {% block main_content %}
+    <a type="button" href="{{ url_for('delete_completed') }}" class="header__link3">
+        DELETE COMPLETED
+    </a>
     <section class="habit-list">
+
         {% for habit in habits %}
             {% set completed = habit["_id"] in completions %}
             {% if completed %}

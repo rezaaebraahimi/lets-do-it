@@ -57,6 +57,7 @@ def add_habit():
     today = today_at_midnight()
     if request.method == "POST":
         db.Todo.insert_one({"_id":uuid.uuid4().hex, "added": today, "name": request.form.get("habit")})
+
     return render_template("todo.html",
                            title="Let's Do IT - Add Habit",
                            selected_date=today)
@@ -77,6 +78,15 @@ def show():
                            completions=allcompleted,
                            habits=habits_does,
                            selected_date=selected_date)
+
+
+@app.route('/delete_completed')
+def delete_completed():
+    db.Todo.delete_many({'complete' : True})
+    return redirect(url_for('index'))
+
+
+
 
 
 if __name__ == "__main__":

@@ -14,10 +14,8 @@
     </head>
     <body>
         <header class="header">
-            <h1 class="header__logo"><a href="{{ url_for('index') }}" class="header__link">Let's Do IT!</a></h1>
-            {% if "add" not in request.endpoint %}
-                <a href="{{ url_for('add_habit') }}" class="header__link2">+ Add New </a>    
-            {% endif %}
+            <h1 class="header__logo"><a href="{{ url_for('index') }}" class="header__link">{{ title }}</a></h1>
+            
             <a href="{{ url_for('show') }}" class="header__link2">Completed Tasks</a> 
         </header>
         <main class="main">
@@ -34,6 +32,9 @@
                     </a>
                 {% endfor %}
             </section>
+            {% if "add" not in request.endpoint %}
+                <a href="{{ url_for('add_habit') }}" class="header__link4">+ Add New Task</a>    
+            {% endif %}
             {% block main_content %}
             {% endblock %}
 
