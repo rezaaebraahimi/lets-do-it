@@ -7,6 +7,7 @@
 body {
     box-sizing: border-box;
     font-family: "inter", sans-serif;
+    background-color: rgba(215, 230, 255, 0.5);
 }
 
 .header, .main {
@@ -145,4 +146,22 @@ body {
     text-align: left;
     background-color: unset;
     cursor: pointer;
+}
+
+
+.doit {
+    display:flex;
+    flex-direction: column;
+    padding: 1rem 1rem;
+    margin: 0% auto;
+    align-items: center;
+    text-align: center;
+    max-width: 18rem;
+    font-size: 14px;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    background-color: rgba(175, 175, 175, 0.40);
+    color: rgba(75, 75, 75, 0.85);
+    border-radius: 20px;
+    margin-top: 3rem;
+    margin-bottom: auto;
 }
