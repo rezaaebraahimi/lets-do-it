@@ -7,8 +7,8 @@
     </a>
     <section class="habit-list">
 
-        {% for habit in habits %}
-            {% set completed = habit["name"] in completions %}
+        {% for habit in habits_does %}
+            {% set completed = habit["name"] in allcompleted %}
             {% if completed %}
             <div class="habit completed">
                 <p class="habit__name">
