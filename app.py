@@ -45,12 +45,12 @@ def index():
     date_str = request.args.get("date")
     if date_str:
         selected_date = datetime.datetime.fromisoformat(date_str)
-        habits_on_date = db.Todo.find({"added": selected_date})
+        habits_on_date = db.Todo.find({"date": selected_date})
     else:
         selected_date = today_at_midnight()
-        habits_on_date = db.Todo.find({"added": selected_date})
+        habits_on_date = db.Todo.find({"date": selected_date})
       
-    Completed = [habit["habit"] for habit in db.Completed.find({"date":selected_date})]    
+    Completed = [habit["name"] for habit in db.Completed.find({"date_complete":selected_date})]    
     
     return render_template("home.html",
                            habits=habits_on_date,
@@ -64,10 +64,8 @@ def index():
 def complete():
     date_string = request.form.get("date")
     date = datetime.datetime.fromisoformat(date_string)
-    habit = request.form.get("habitId")
-    db.Completed.insert_one({"date": date, "habit":habit})
-    db.Todo.delete_many({})
-    
+    habit = request.form.get("habitName")
+    db.Completed.insert_one({"date_complete": date, "name":habit})
     return redirect(url_for("index",date=date_string))
 
 
@@ -80,13 +78,13 @@ def add_habit():
             
             if request.method == "POST":
                 db.Todo.insert_one({"_id":uuid.uuid4().hex,
-                                    "added": selected_date,
+                                    "date": selected_date,
                                     "name": request.form.get("habit")})
         else:
             selected_date = today_at_midnight()
             if request.method == "POST":
                 db.Todo.insert_one({"_id":uuid.uuid4().hex,
-                                    "added": selected_date,
+                                    "date": selected_date,
                                     "name": request.form.get("habit")})
         
         return render_template("todo.html",
@@ -103,8 +101,8 @@ def show():
     else:
         selected_date = today_at_midnight()
         
-    habits_does = db.Todo.find({"added": {"$lte":selected_date}}) 
-    allcompleted = [habit["habit"] for habit in db.Completed.find({"date":{"$lte":selected_date}})]
+    habits_does = db.Todo.find({"date": {"$lte":selected_date}}) 
+    allcompleted = [habit["name"] for habit in db.Completed.find({"date_complete":{"$lte":selected_date}})]
     
     return render_template("show.html",
                            title="Let's Do IT - Show All",
@@ -114,9 +112,9 @@ def show():
 
 
 
-@app.route('/delete_completed')
+@app.route('/delete_completed', methods = ["POST", "GET"])
 def delete_completed():
-    db.Completed.delete_many({})  
+    db.Completed.delete_many({})
     return redirect(url_for('index'))
 
 

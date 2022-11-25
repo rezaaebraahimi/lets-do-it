@@ -8,7 +8,7 @@
     <section class="habit-list">
 
         {% for habit in habits %}
-            {% set completed = habit["_id"] in completions %}
+            {% set completed = habit["name"] in completions %}
             {% if completed %}
             <div class="habit completed">
                 <p class="habit__name">
@@ -22,4 +22,3 @@
         {% endfor %}
     </section>
 {% endblock %}
-

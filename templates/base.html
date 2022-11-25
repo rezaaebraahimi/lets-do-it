@@ -18,8 +18,11 @@
             
             <a href="{{ url_for('show') }}" class="header__link2">Completed Tasks</a> 
         </header>
+
         <main class="main">
+
             <section class="dates">
+
                 {% for date in date_range(selected_date) %}
                     <a
                         class="dates__link {{ 'dates__link--current' if loop.index0 == 3 else '' }}"
@@ -32,13 +35,16 @@
                     </a>
                 {% endfor %}
             </section>
+
             {% if "add" not in request.endpoint %}
                 <a href="{{ url_for('add_habit') }}" class="header__link4">+ Add New Task</a>    
             {% endif %}
+
             {% block main_content %}
             {% endblock %}
 
         </main>
+
         <p class="doit">One day you will wake up <br>
             and won't be any more time <br> to do 
             the things you've always wanted to do..!
