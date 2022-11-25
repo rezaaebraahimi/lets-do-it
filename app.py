@@ -75,7 +75,7 @@ def complete():
 
 @app.route("/add",  methods=["POST", "GET"])
 def add_habit():
-        date_str = request.args.get("date")
+        date_str = request.form.get("date")
         if date_str:
             not_today = datetime.datetime.fromisoformat(date_str)
             if datetime.datetime.today() != not_today:
@@ -99,7 +99,7 @@ def add_habit():
 
 @app.route("/show", methods = ["POST", "GET"])
 def show():
-    date_str = request.args.get("date")
+    date_str = request.form.get("date")
     if date_str:
         selected_date = datetime.datetime.fromisoformat(date_str)
     else:
