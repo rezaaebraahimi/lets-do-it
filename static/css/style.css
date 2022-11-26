@@ -210,3 +210,15 @@ body {
     margin-top: 2rem;
     margin-bottom: auto;
 }
+
+
+.alert {
+    margin: 10% auto;
+    text-align: center;
+    max-width: 20rem;
+    border-radius: 20px;
+    font-weight: bold;
+    padding: 1px 1px;
+    background-color: rgba(255, 165, 45, 0.65);
+    color: black;
+}

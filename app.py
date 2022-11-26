@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import datetime
@@ -8,10 +8,13 @@ import uuid
 
 load_dotenv()
 app = Flask(__name__)
+app.secret_key = "123reza"
 client = MongoClient(os.environ.get("MONGODB_URI"))
 db = client.Todo
+users = {}
 
 
+# Make a date range list for datetime bar 
 @app.context_processor
 def add_calc_date_range():
     def date_range(start: datetime.datetime):
@@ -21,22 +24,10 @@ def add_calc_date_range():
     return {"date_range": date_range}
 
 
-
-def today_at_midnight():
+# Today time format
+def today_():
     today = datetime.datetime.today()
-    
     return datetime.datetime(today.year, today.month, today.day)
-
-
-
-def no_today():
-    date_str = request.args.get("date")
-    if date_str:
-        not_today = datetime.datetime.fromisoformat(date_str)
-        if datetime.datetime.today() != not_today:
-            selected_date = not_today
-    
-    return datetime.datetime(selected_date.year, selected_date.month, selected_date.day)
 
 
 
@@ -46,11 +37,11 @@ def index():
     if date_str:
         not_today = datetime.datetime.fromisoformat(date_str)
         if datetime.datetime.today() != not_today:
-            selected_date = no_today()
+            selected_date = not_today
             habits_on_date = db.Todo.find({"date": selected_date})
             Completed = [habit["name"] for habit in db.Completed.find({"date_complete":selected_date})]
     else:
-        selected_date = today_at_midnight()
+        selected_date = today_()
         habits_on_date = db.Todo.find({"date": selected_date})
         Completed = [habit["name"] for habit in db.Completed.find({"date_complete":selected_date})]    
     
@@ -69,17 +60,20 @@ def complete():
     habit = request.form.get("habitName")
     db.Completed.insert_one({"date_complete": date, "name":habit})
     db.Todo.delete_one({"date": date, "name":habit})
+    flash("Task Complete!", "warning")
     return redirect(url_for("index",date=date_string))
 
 
 
 @app.route("/add",  methods=["POST", "GET"])
 def add_habit():
-    today = today_at_midnight()
+    today = today_()
     if request.form:
         db.Todo.insert_one({"_id":uuid.uuid4().hex,
                                     "date": today,
                                     "name": request.form.get("habit")})
+        flash("New task successfully added!", "info")
+        return redirect(url_for('index'))
     return render_template("todo.html",title="Let's Do IT - Add Habit",selected_date=today)
 
 
@@ -90,7 +84,7 @@ def show():
     if date_str:
         selected_date = datetime.datetime.fromisoformat(date_str)
     else:
-        selected_date = today_at_midnight()
+        selected_date = today_()
         
     habits_does = db.Completed.find({"date_complete": {"$lte":selected_date}}) 
     allcompleted = [habit["name"] for habit in db.Completed.find({"date_complete":{"$lte":selected_date}})]
@@ -103,8 +97,20 @@ def show():
 @app.route('/delete_completed', methods = ["POST", "GET"])
 def delete_completed():
     db.Completed.delete_many({})
+    flash("Completed tasks has been deleted!", "error")
     return redirect(url_for('index'))
 
+
+
+app.route("/signup", methods = ["POST","GET"])
+def signup():
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+        
+        users[email] = password
+        flash("Successfully signed up.")
+        
 
 
 if __name__ == "__main__":

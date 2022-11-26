@@ -15,6 +15,7 @@
     <body>
         <header class="header">
             <h1 class="header__logo"><a href="{{ url_for('index') }}" class="header__link">{{ title }}</a></h1>
+
             
             <a href="{{ url_for('show') }}" class="header__link2">Completed Tasks</a> 
         </header>
@@ -39,6 +40,12 @@
             {% if "add" not in request.endpoint %}
                 <a href="{{ url_for('add_habit') }}" class="header__link4">+ Add New Task</a>    
             {% endif %}
+
+                    {% for message in get_flashed_messages() %}
+                        <div class="alert" role="alert">
+                            <span> {{ message }} </span>
+                        </div>
+                    {% endfor %}
 
             {% block main_content %}
             {% endblock %}
