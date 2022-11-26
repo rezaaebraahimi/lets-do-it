@@ -75,31 +75,18 @@ def complete():
 
 @app.route("/add",  methods=["POST", "GET"])
 def add_habit():
-        date_str = request.form.get("date")
-        if date_str:
-            not_today = datetime.datetime.fromisoformat(date_str)
-            if datetime.datetime.today() != not_today:
-                selected_date = no_today()
-            
-                if request.method == "POST":
-                    db.Todo.insert_one({"_id":uuid.uuid4().hex,
-                                    "date": selected_date,
+    today = today_at_midnight()
+    if request.form:
+        db.Todo.insert_one({"_id":uuid.uuid4().hex,
+                                    "date": today,
                                     "name": request.form.get("habit")})
-        else:
-            today = datetime.datetime.today()
-            if datetime.datetime.today() == today:
-                selected_date = today_at_midnight()
-                if request.method == "POST":
-                    db.Todo.insert_one({"_id":uuid.uuid4().hex,
-                                    "date": selected_date,
-                                    "name": request.form.get("habit")})
-        return render_template("todo.html",title="Let's Do IT - Add Habit",selected_date=selected_date)
+    return render_template("todo.html",title="Let's Do IT - Add Habit",selected_date=today)
 
 
 
 @app.route("/show", methods = ["POST", "GET"])
 def show():
-    date_str = request.form.get("date")
+    date_str = request.form.get("date") 
     if date_str:
         selected_date = datetime.datetime.fromisoformat(date_str)
     else:
