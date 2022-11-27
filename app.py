@@ -6,7 +6,6 @@ import datetime
 import uuid
 
 
-
 load_dotenv()
 app = Flask(__name__)
 app.secret_key = "letsdoit"
@@ -14,8 +13,7 @@ client = MongoClient(os.environ.get("MONGODB_URI"))
 db = client.Todo
 
 
-
-    # Make a range list of dates
+    ### Make a range list of dates ###
 
 @app.context_processor
 def add_calc_date_range():
@@ -25,34 +23,26 @@ def add_calc_date_range():
     return {"date_range": date_range}
 
 
-
-    # define today format time 
+    ### define today format time ###
 
 def today_():
     today = datetime.datetime.today()
     return datetime.datetime(today.year, today.month, today.day)
 
 
-
-    # Main page function
+    ### Main page function ###
 
 @app.route("/", methods=["POST", "GET"])
 def index():
     date_str = request.args.get("date")
     if date_str:
-        not_today = datetime.datetime.fromisoformat(date_str)
-        if datetime.datetime.today() != not_today:
-            selected_date = not_today
-            habits_on_date = db.Todo.find({"date": selected_date})
-            Completed = [
-                habit["name"] for habit in db.Completed.find(
-                    {"date_complete":selected_date})]
+        selected_date = datetime.datetime.fromisoformat(date_str)
     else:
         selected_date = today_()
-        habits_on_date = db.Todo.find({"date": selected_date})
-        Completed = [
-            habit["name"] for habit in db.Completed.find(
-                {"date_complete":selected_date})]    
+            
+    habits_on_date = db.Todo.find({"date": selected_date})
+    Completed = [habit["name"] for habit in db.Completed.find(
+                    {"date_complete":selected_date})]
     
     return render_template("home.html",
                            habits=habits_on_date,
@@ -61,8 +51,7 @@ def index():
                            selected_date=selected_date)
 
 
-
-    # when a task complete 
+    ### when a task complete ###
 
 @app.route("/complete", methods=["POST", "GET"])
 def complete():
@@ -75,7 +64,7 @@ def complete():
     return redirect(url_for("index",date=date_string))
 
 
-    # add new daily task
+    ### add new daily task ###
 
 @app.route("/add",  methods=["POST", "GET"])
 def add_habit():
@@ -91,8 +80,7 @@ def add_habit():
                            selected_date=today)
 
 
-
-    # show all of the completed tasks
+    ### show all of the completed tasks ###
 
 @app.route("/show", methods = ["POST", "GET"])
 def show():
@@ -114,8 +102,7 @@ def show():
                            selected_date=selected_date)
 
 
-
-    # delete all of the completed tasks
+    ### delete all of the completed tasks ###
 
 @app.route('/delete_completed', methods = ["POST", "GET"])
 def delete_completed():
@@ -123,6 +110,6 @@ def delete_completed():
     flash("Completed tasks has been deleted!", "error")
     return redirect(url_for('index'))
 
-
+    ### Run App ###
 if __name__ == "__main__":
     app.run(host:="0.0.0.0", port:=int(os.environ.get('PORT', 5000)))
